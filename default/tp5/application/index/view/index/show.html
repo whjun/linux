@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<table border="1">
+		<th>ID</th>
+		<th>关键字</th>
+		<th>访问次数</th>
+		<th>操作</th>
+		<?php foreach($data as $v){?>
+		<tr>
+			<td><?= $v['id']?></td>
+			<td><?= $v['name']?></td>
+			<td><?= $v['num']?></td>
+			<td>
+				<a href="http://www.wanghongjun.top/tp5/public/?s=index/Index/del&id=<?= $v['id']?>">删除</a>
+				<a href="http://www.wanghongjun.top/tp5/public/?s=index/Index/update&id=<?= $v['id']?>">编辑</a>
+			</td>
+		</tr>
+		<?php }?>
+	</table>
+</body>
+</html>

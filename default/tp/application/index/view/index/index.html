@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" href="static/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+	<!-- <script src="static/bootstrap/js/bootstrap.js"></script> -->
+	<!-- <script src="static/bootstrap/js/bootstrap.min.js"></script> -->
+	<script src="static/bootstrap/js/jquery.js"></script>
+</head>
+<body>
+	<center>
+		<div><h3>欢迎<font color="red"><?php echo $res['name']?></font>登录</h3></div>
+		<h2>留言板</h2>
+		<!-- <form action="?s=index/index/add_do" method="post"> -->
+			<label for="">我要留言：</label>
+		    <textarea class="form-control" name="content" rows="3" placeholder="留言内容"></textarea>
+		    <br>
+		    <input type="checkbox" name="is_no" class="check" value="1"> 是否匿名
+		    <br>
+		    <input type="button" value="保存留言" class="btn btn-info">
+	    <!-- </form> -->
+	</center>
+	<hr>
+	<hr>
+	<hr>
+	<center>
+		<table class="table table-bordered" style="width: 800px;">
+			<th>留言序号</th>
+			<th>留言人</th>
+			<th>留言内容</th>
+			<th>留言时间</th>
+			<th>操作</th>
+			<th>无权限</th>
+			<tbody id="list">
+				<?php foreach($data as $v){?>
+					<tr>
+						<td><?= $v['id']?></td>
+						<td><?= $v['user_name']?></td>
+						<td><?= $v['content']?></td>
+						<td><?= $v['time']?></td>
+						<td>
+							<?php if($v['p_id']==$res['id']){?>
+							<a href="#" value="<?= $v['id']?>" class="del">删除</a>
+							<?php }?>
+						</td>
+						<td>
+							<?php if($v['p_id'] != $res['id']){?>
+								<font color="red">无权限操作</font>
+							<?php }?>
+						</td>
+					</tr>
+				<?php }?>
+			</tbody>
+		</table>
+	</center>
+</body>
+</html>
+<script>
+	$(document).on('click','.btn-info',function(){
+		event.preventDefault();
+
+		var content = $('[name=content]').val();
+		//判断复选框是否被选中
+		if($('[name=is_no]').is(':checked')){
+			var is_no = $('[name=is_no]').val();
+		}else{
+			var is_no = 0;
+		}
+		if(content==''){
+			alert('请先输入留言内容');
+			return false;
+		}
+		$.ajax({
+			url:"index.php?s=index/index/add_do",
+			data:{content:content,is_no:is_no},
+			type:'post',
+			dataType:'json',
+			success:function(res){
+					console.log(res);
+					$('[name=content]').val("");
+					$('.check').prop("checked",false);
+
+					$('#list').empty();
+					// alert(res);return;
+					$.each(res.data,function(i,v){
+						// alert(111);return;
+						var tr = $('<tr></tr>');
+						tr.append("<td>"+v.id+"</td>");
+						tr.append("<td>"+v.user_name+"</td>");
+						tr.append("<td>"+v.content+"</td>");
+						tr.append("<td>"+v.time+"</td>");
+						if(v.p_id==0){
+							tr.append("<td><a href='#' value="+v.id+" class='del'>删除</a></td>");
+						}
+						if(v.p_id!=0){
+							tr.append("<td><font class='red'>无权限操作</font></td>");
+						}else{
+							tr.append("<td></td>")
+						}
+
+						$("#list").append(tr);
+					})
+				
+			}
+		})
+	})
+
+
+	$(document).on('click','.del',function(){
+		event.preventDefault();
+		var id = $(this).attr('value');
+		$.ajax({
+			url:"?s=index/index/del",
+			data:{id:id},
+			type:"post",
+			dataType:"json",
+			success:function(res){
+
+				// console.log(res);return;
+				// if(res==1){
+				// 	alert("删除失败");return;
+				// }
+				$('#list').empty();
+				$.each(res.data,function(i,v){
+					// alert(111);return;
+					var tr = $('<tr></tr>');
+					tr.append("<td>"+v.id+"</td>");
+					tr.append("<td>"+v.user_name+"</td>");
+					tr.append("<td>"+v.content+"</td>");
+					tr.append("<td>"+v.time+"</td>");
+					if(v.p_id==0){
+						tr.append("<td><a href='#' value="+v.id+" class='del'>删除</a></td>");
+					}else{
+						tr.append("<td></td>");
+					}
+					if(v.p_id!=0){
+						tr.append("<td><font class='red'>无权限操作</font></td>");
+					}else{
+						tr.append("<td></td>");
+					}
+					$("#list").append(tr);
+				})
+			}
+		})
+	})
+
+	function url(url) {
+		event.preventDefault();
+		$('#list').empty();
+		$.each(res.data,function(i,v){
+			// alert(111);return;
+			var tr = $('<tr></tr>');
+			tr.append("<td>"+v.id+"</td>");
+			tr.append("<td>"+v.user_name+"</td>");
+			tr.append("<td>"+v.content+"</td>");
+			tr.append("<td>"+v.time+"</td>");
+			if(v.p_id==0){
+				tr.append("<td><a href='#' value="+v.id+" class='del'>删除</a></td>");
+			}else{
+				tr.append("<td></td>");
+			}
+			if(v.p_id!=0){
+				tr.append("<td><font class='red'>无权限操作</font></td>");
+			}else{
+				tr.append("<td></td>");
+			}
+			$("#list").append(tr);
+		})
+	}
+</script>

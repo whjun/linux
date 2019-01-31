@@ -1,0 +1,11 @@
+<?php
+namespace App\http\Controllers\Index;
+use App\http\Controllers\Controller;
+
+class IndexController extends Controller{
+	public function index(){
+		echo "this is index";
+	}
+}
+
+?>

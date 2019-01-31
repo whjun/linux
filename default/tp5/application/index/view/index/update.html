@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" href="__STATIC__/bootstrap/js/bootstrap.css">
+	<script src="__STATIC__/bootstrap/js/bootstrap.js"></script>
+	<script src="__STATIC__/bootstrap/js/jquery.js"></script>
+</head>
+<body>
+	<center>
+		<form action="http://119.23.216.239/tp5/public/?s=index/Index/update_do" method="post">
+			<table>
+				<input type="hidden" name="id" value="<?= $data['id']?>">
+				<tr>
+					<td><input type="text" name="name" value="<?= $data['name']?>"><input type="submit" class="btn btn-info" value="保存"></td>
+				</tr>
+			</table>
+		</form>
+		
+	</center>
+</body>
+</html>
+
+<script>
+	$(document).on('click','.btn',function(){
+		alert(123);
+	})
+</script>
